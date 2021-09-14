@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float cameraRotationLimit;
     private float currentCameraRotationX = 0;
+    private float currentCameraRotationY = 0;
 
     [SerializeField]
     private Camera theCamera;
@@ -109,9 +110,11 @@ public class PlayerController : MonoBehaviour
     private void CameraRotation()
     {//상하 카메라 회전
         float _xRotation = Input.GetAxisRaw("Mouse Y");
+        
         float _cameraRotationX = _xRotation * lookSensitivity;
         currentCameraRotationX -= _cameraRotationX;
         currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
+      
 
         theCamera.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
     }
