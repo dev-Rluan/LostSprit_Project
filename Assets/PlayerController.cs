@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float cameraRotationLimit;
     private float currentCameraRotationX = 0;
-    private float currentCameraRotationY = 0;
 
     [SerializeField]
     private Camera theCamera;
@@ -78,8 +77,10 @@ public class PlayerController : MonoBehaviour
         Vector3 _moveVertical = transform.forward * _moveDirZ;
 
         Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * applySpeed;
-
-        myRigid.MovePosition(transform.position + _velocity * Time.deltaTime);
+        //if (!isBorder)
+        //{
+            myRigid.MovePosition(transform.position + _velocity * Time.deltaTime);
+        //}
     }
 
     private void CharacterRotation()
@@ -94,9 +95,10 @@ public class PlayerController : MonoBehaviour
     void StopToWall()   //벽에 닿았을 시 이동제한
     {
         //Scene 내에서 Ray를 보여주는 함수 / 시작위치 / 쏘는방향 / Ray의 길이 / 색깔
-        Debug.DrawRay(transform.position, transform.forward * 2, Color.green);
+        //Debug.DrawRay(transform.position, transform.forward * 2, Color.green);
+        
         // Wall이라는 LayerMask를 가진 물체랑 충돌하면 bool값이 true로 바뀜
-        isBorder = Physics.Raycast(transform.position, transform.forward, 2, LayerMask.GetMask("Wall"));
+        //isBorder = Physics.Raycast(transform.position, transform.forward, 2, LayerMask.GetMask("Wall"));
     }
     void FreezeRotation() //회전방지(캐릭터가 물체와 닿았을 때 의도치 않게 회전되는 오류현상 방지)
     {
@@ -110,11 +112,9 @@ public class PlayerController : MonoBehaviour
     private void CameraRotation()
     {//상하 카메라 회전
         float _xRotation = Input.GetAxisRaw("Mouse Y");
-        
         float _cameraRotationX = _xRotation * lookSensitivity;
         currentCameraRotationX -= _cameraRotationX;
         currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
-      
 
         theCamera.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
     }
@@ -203,8 +203,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isCrouch)
             Crouch();
-
-        myRigid.velocity = transform.up * jumpForce;
+        if(isGround == true)
+         myRigid.velocity = transform.up * jumpForce;
 
     }
 }
