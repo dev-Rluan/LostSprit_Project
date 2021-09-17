@@ -43,8 +43,6 @@ public class PlayerController : MonoBehaviour
     private float originPosY;
     private float applyCrouchPosY;
 
-    bool isBorder;
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +53,6 @@ public class PlayerController : MonoBehaviour
         originPosY = theCamera.transform.localPosition.y;
         applyCrouchPosY = originPosY;
     }
-
 
     // Update is called once per frame
     void Update()
@@ -77,10 +74,8 @@ public class PlayerController : MonoBehaviour
         Vector3 _moveVertical = transform.forward * _moveDirZ;
 
         Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * applySpeed;
-        //if (!isBorder)
-        //{
-            myRigid.MovePosition(transform.position + _velocity * Time.deltaTime);
-        //}
+
+        myRigid.MovePosition(transform.position + _velocity * Time.deltaTime);
     }
 
     private void CharacterRotation()
@@ -92,23 +87,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log(myRigid.rotation.eulerAngles);
 
     }
-    void StopToWall()   //벽에 닿았을 시 이동제한
-    {
-        //Scene 내에서 Ray를 보여주는 함수 / 시작위치 / 쏘는방향 / Ray의 길이 / 색깔
-        //Debug.DrawRay(transform.position, transform.forward * 2, Color.green);
-        
-        // Wall이라는 LayerMask를 가진 물체랑 충돌하면 bool값이 true로 바뀜
-        //isBorder = Physics.Raycast(transform.position, transform.forward, 2, LayerMask.GetMask("Wall"));
-    }
-    void FreezeRotation() //회전방지(캐릭터가 물체와 닿았을 때 의도치 않게 회전되는 오류현상 방지)
-    {
-        myRigid.angularVelocity = Vector3.zero;   //회전속도를 0으로 바꿈 > 스스로 도는현상 X 
-    }
-    void FixedUpdate()  //함수실행
-    {
-        FreezeRotation();
-        StopToWall();
-    }
+
     private void CameraRotation()
     {//상하 카메라 회전
         float _xRotation = Input.GetAxisRaw("Mouse Y");
@@ -203,8 +182,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isCrouch)
             Crouch();
-        if(isGround == true)
-         myRigid.velocity = transform.up * jumpForce;
+
+        myRigid.velocity = transform.up * jumpForce;
 
     }
 }
