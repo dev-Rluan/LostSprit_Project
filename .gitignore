@@ -67,6 +67,7 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+<<<<<<< HEAD
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
@@ -459,3 +460,16 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/unity,visualstudio
+=======
+# 로그파일 무시
+.log
+.exe*.log
+
+
+# ArtifactDB
+/ArtifactDB
+/SourceAssetDB
+# 
+.dwlt
+
+>>>>>>> main
