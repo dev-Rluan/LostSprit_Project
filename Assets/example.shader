@@ -46,7 +46,7 @@ Shader "Custom/Water"
                 // Normal
                 float3 fNormal1 = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap + float2(_Time.y * 0.07, 0.0f)));
                 float3 fNormal2 = UnpackNormal(tex2D(_BumpMap2, IN.uv_BumpMap2 - float2(_Time.y * 0.05, 0.0f)));
-                o.Normal = (fNormal1 + fNormal2) / 2;
+                o.Normal = (fNormal1 + fNormal2) /2;
 
                 // reflection
                 float3 fRefl = texCUBE(_CubeMap, WorldReflectionVector(IN, o.Normal));
@@ -58,7 +58,7 @@ Shader "Custom/Water"
                 //grab
                 float4 fNoise = tex2D(_MainTex, IN.uv_MainTex + _Time.x);
                 float3 scrPos = IN.screenPos.xyz / (IN.screenPos.w + 0.0000001);
-                float3 fGrab = tex2D(_GrabTexture, scrPos.xy + fNoise.r * 0.05);
+                float3 fGrab = tex2D(_GrabTexture, scrPos.xy + fNoise.r * 0.001);
 
                 o.Gloss = 1;
                 o.Specular = 1;
