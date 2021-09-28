@@ -6,6 +6,15 @@ using UnityEngine.Scripting.APIUpdating;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
+    public float[] cntitem;
+
+    [SerializeField]
+    public GameObject[] itemObj;
+    public Transform[] itemPos;
+
+    [SerializeField]
+    private string attr;
 
     [SerializeField]
     private float walkSpeed;
@@ -45,7 +54,14 @@ public class PlayerController : MonoBehaviour
     private float applyCrouchPosY;
 
     bool isBorder;
-    
+    bool eDown;
+    bool rDown;
+    bool save;
+    private int locitem;
+    GameObject nearObject;
+    Rigidbody rigid;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +77,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GetInput();
         IsGround();
         TryRun();
         TryJump();
@@ -68,8 +85,15 @@ public class PlayerController : MonoBehaviour
         Move();
         CameraRotation();
         CharacterRotation();
+        Interation();
+        Drop();
     }
-    private void Move()
+    void GetInput()
+    {   //키입력 이벤트
+        eDown = Input.GetButtonDown("Interation");
+        rDown = Input.GetButtonDown("Drop");
+    }
+        private void Move()
     {
         float _moveDirX = Input.GetAxisRaw("Horizontal");
         float _moveDirZ = Input.GetAxisRaw("Vertical");
@@ -91,6 +115,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log(myRigid.rotation.eulerAngles);
 
     }
+<<<<<<< Updated upstream
     void StopToWall()   //벽에 닿았을 시 이동제한
     {
         //Scene 내에서 Ray를 보여주는 함수 / 시작위치 / 쏘는방향 / Ray의 길이 / 색깔
@@ -98,6 +123,8 @@ public class PlayerController : MonoBehaviour
         // Wall이라는 LayerMask를 가진 물체랑 충돌하면 bool값이 true로 바뀜
         isBorder = Physics.Raycast(transform.position, transform.forward, 2, LayerMask.GetMask("Wall"));
     }
+=======
+>>>>>>> Stashed changes
     void FreezeRotation() //회전방지(캐릭터가 물체와 닿았을 때 의도치 않게 회전되는 오류현상 방지)
     {
         myRigid.angularVelocity = Vector3.zero;   //회전속도를 0으로 바꿈 > 스스로 도는현상 X 
@@ -206,5 +233,81 @@ public class PlayerController : MonoBehaviour
 
         myRigid.velocity = transform.up * jumpForce;
 
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "FireFloor" && attr == "water")     
+        {
+            Invoke("water", 0.4f);
+        }
+        if (collision.gameObject.tag == "WaterFloor" && attr =="fire")     
+        {
+            Invoke("fire", 0.4f);
+        }
+        if (collision.gameObject.tag == "PoisonFloor")
+        {
+            if (attr == "water")
+            {
+                Invoke("water", 0.4f);
+            }
+            else if (attr == "fire")
+            {
+                Invoke("fire", 0.4f);
+            }
+        }
+    }
+    void water()
+    {
+        gameObject.transform.position = new Vector3(0, 0, 0);
+    }
+    void fire()
+    {
+        gameObject.transform.position = new Vector3(0, 0, 15);
+    }
+    void StopToWall()
+    {
+        //Scene 내에서 Ray를 보여주는 함수 / 시작위치 / 쏘는방향 / Ray의 길이 / 색깔
+        Debug.DrawRay(transform.position, transform.forward * 2, Color.green);
+        // Wall이라는 LayerMask를 가진 물체랑 충돌하면 bool값이 true로 바뀜
+        isBorder = Physics.Raycast(transform.position, transform.forward, 2, LayerMask.GetMask("Wall"));
+    }
+    void Interation()   
+    {
+        if (eDown && nearObject != null)
+        {
+            if (nearObject.tag == "rockitem")
+            {
+                  Item item = nearObject.GetComponent<Item>();
+                  locitem = 0;
+                  cntitem[0] = cntitem[0] + 1;
+                  Destroy(nearObject);    //상호작용한 물체를 삭제함
+                  
+            }
+        }
+    }
+    void Drop()
+    {
+        if (rDown && !isBorder && cntitem[locitem] != 0)
+        {
+            Instantiate(itemObj[locitem], itemPos[0].position, Quaternion.identity);
+            cntitem[locitem] -= 1;
+
+
+        }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+            /*
+        if (other.tag == "rockitem")     //아이템과 닿았을 때
+        {
+                Invoke("fire", 0.4f);
+        }
+            */
+    }
+    void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "rockitem")   
+            nearObject = other.gameObject;
     }
 }
