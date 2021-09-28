@@ -61,3 +61,11 @@ crashlytics-build.properties
 # 로그파일 무시
 .log
 .exe*.log
+
+
+# ArtifactDB
+/ArtifactDB
+/SourceAssetDB
+# 
+.dwlt
+
