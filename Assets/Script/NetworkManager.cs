@@ -68,5 +68,9 @@ public class NetworkManager : MonoBehaviour
 		movePacket.posZ = posZ;
 		Send(movePacket.Write());
 	}
+	public void DestroyObject(String tag)
+    {
+		
+	}
 
 }

@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     public GameObject Panel;
     public GameObject Door;
     public GameObject OpenDoor;
+    public GameObject cubeItem;
 
     bool isBorder;
     bool eDown;
@@ -128,7 +129,18 @@ public class PlayerController : MonoBehaviour
         Vector3 v = transform.position + _velocity * Time.deltaTime;
         
         myRigid.MovePosition(v);
-
+        if (v.y < -100.0f)
+        {
+            if (attr == "water")
+            {
+                Invoke("water", 0.4f);
+            }
+            if (attr == "fire")
+            {
+                Invoke("fire", 0.4f);
+            }
+            
+        } 
         _network.MovePlayer(v.x, v.y, v.z);
 
     }
@@ -304,14 +316,29 @@ public class PlayerController : MonoBehaviour
                 Item item = nearObject.GetComponent<Item>();
                 locitem = 0;
                 cntitem[0] = cntitem[0] + 1;
-                Destroy(nearObject);    //상호작용한 물체를 삭제함
+
+                _network.DestroyObject("rockitem");    //상호작용한 물체를 삭제함
+                Destroy(item);
             }
 
             if(nearObject.tag == "Door" && cntitem[0] != 0)
             {
-                Destroy(nearObject);
-                OpenDoor.gameObject.SetActive(true);
+                _network.DestroyObject("Door");                
+                Destroy(OpenDoor);  
             }
+        }
+    }
+    public void DestroyItemEvent(string tag)
+    {
+        if (tag == "rockitem")
+        {           
+            
+            Destroy(cubeItem);
+        }
+        if (tag == "Door")
+        {
+            OpenDoor.gameObject.SetActive(true);
+            Destroy(OpenDoor);
         }
     }
     void Drop()
@@ -320,7 +347,6 @@ public class PlayerController : MonoBehaviour
         {
             Instantiate(itemObj[locitem], itemPos[0].position, Quaternion.identity);
             cntitem[locitem] -= 1;
-
 
         }
     }

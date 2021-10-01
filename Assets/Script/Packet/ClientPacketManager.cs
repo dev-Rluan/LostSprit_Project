@@ -27,6 +27,10 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.S_PlayerList, PacketHandler.S_PlayerListHandler);
 		_makeFunc.Add((ushort)PacketID.S_BroadCastMove, MakePacket<S_BroadCastMove>);
 		_handler.Add((ushort)PacketID.S_BroadCastMove, PacketHandler.S_BroadCastMoveHandler);
+		_makeFunc.Add((ushort)PacketID.S_BoradCastDestroyItem, MakePacket<S_BoradCastDestroyItem>);
+		_handler.Add((ushort)PacketID.S_BoradCastDestroyItem, PacketHandler.S_BoradCastDestroyItemHandler);
+		_makeFunc.Add((ushort)PacketID.S_BroadCastGameOver, MakePacket<S_BroadCastGameOver>);
+		_handler.Add((ushort)PacketID.S_BroadCastGameOver, PacketHandler.S_BroadCastGameOverHandler);
 
 	}
 
