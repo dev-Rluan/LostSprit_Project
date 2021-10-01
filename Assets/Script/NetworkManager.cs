@@ -70,7 +70,15 @@ public class NetworkManager : MonoBehaviour
 	}
 	public void DestroyObject(String tag)
     {
-		
+		C_DestroyItem packet = new C_DestroyItem();
+		packet.item = tag;
+		Send(packet.Write());
 	}
+
+	public void GameOverEvent()
+    {
+		C_GameOver packet = new C_GameOver();
+		Send(packet.Write());
+    }
 
 }

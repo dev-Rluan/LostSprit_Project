@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     public GameObject Panel;
     public GameObject Door;
     public GameObject OpenDoor;
-    public GameObject cubeItem;
+    
 
     bool isBorder;
     bool eDown;
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
     public MyPlayer myPlayer;
     public int PlayerId { get; set; }
-
+    //public GameObject cubeItem { get; set; }
     // Start is called before the first frame update
     void Start()
     {
@@ -100,9 +100,23 @@ public class PlayerController : MonoBehaviour
         CharacterRotation();
         Interation();
         Drop();
-
         
     }
+    private void gameOver(string attr)
+    {
+        switch (attr)
+        {
+            case "water":
+                Invoke("water", 0.4f);
+                break;
+            case "fire":
+                Invoke("fire", 0.4f);
+                break;
+        }
+        
+    }
+
+
     private void startGame()
     {
         if(attr == "fire")  
@@ -131,15 +145,7 @@ public class PlayerController : MonoBehaviour
         myRigid.MovePosition(v);
         if (v.y < -100.0f)
         {
-            if (attr == "water")
-            {
-                Invoke("water", 0.4f);
-            }
-            if (attr == "fire")
-            {
-                Invoke("fire", 0.4f);
-            }
-            
+            gameOver(attr);
         } 
         _network.MovePlayer(v.x, v.y, v.z);
 
@@ -313,34 +319,37 @@ public class PlayerController : MonoBehaviour
         {
             if (nearObject.tag == "rockitem")
             {
-                Item item = nearObject.GetComponent<Item>();
+                
                 locitem = 0;
                 cntitem[0] = cntitem[0] + 1;
 
-                _network.DestroyObject("rockitem");    //상호작용한 물체를 삭제함
-                Destroy(item);
-            }
+                //상호작용한 물체를 삭제함
+                Destroy(nearObject);
 
+                //_network.DestroyObject("rockitem");
+            }
+//&& cntitem[0] != 0
             if(nearObject.tag == "Door" && cntitem[0] != 0)
             {
-                _network.DestroyObject("Door");                
-                Destroy(OpenDoor);  
+                OpenDoor.gameObject.SetActive(true);
+                Destroy(Door);
+                //_network.DestroyObject("Door");                
+                
             }
         }
     }
-    public void DestroyItemEvent(string tag)
+  /*  public void DestroyItemEvent(string tag)
     {
         if (tag == "rockitem")
-        {           
-            
+        {  
             Destroy(cubeItem);
         }
         if (tag == "Door")
         {
             OpenDoor.gameObject.SetActive(true);
-            Destroy(OpenDoor);
+            Destroy(Door);
         }
-    }
+    }*/
     void Drop()
     {
         if (rDown && !isBorder && cntitem[locitem] != 0)
@@ -350,6 +359,8 @@ public class PlayerController : MonoBehaviour
 
         }
     }
+    
+
     void OnTriggerEnter(Collider other)
     {
         /*

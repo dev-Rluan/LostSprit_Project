@@ -47,17 +47,18 @@ class PacketHandler
 
 	public static void S_BoradCastDestroyItemHandler(PacketSession session, IPacket packet)
 	{
-		S_BroadCastMove pkt = packet as S_BroadCastMove;
-		ServerSession serverSession = session as ServerSession;
+        S_BoradCastDestroyItem pkt = packet as S_BoradCastDestroyItem;
+        ServerSession serverSession = session as ServerSession;
 
-		PlayerManager.Instance.Move(pkt);
-	}
+        //PlayerManager.Instance.DestroyItem(pkt);
+
+    }
 	public static void S_BroadCastGameOverHandler(PacketSession session, IPacket packet)
 	{
-		S_BroadCastMove pkt = packet as S_BroadCastMove;
+		S_BroadCastGameOver pkt = packet as S_BroadCastGameOver;
 		ServerSession serverSession = session as ServerSession;
 
-		PlayerManager.Instance.Move(pkt);
+		
 	}
 
 

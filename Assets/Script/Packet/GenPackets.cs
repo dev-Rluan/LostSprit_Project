@@ -178,6 +178,7 @@ public class S_PlayerList : IPacket
 		public bool Write(ArraySegment<byte> segment, ref ushort count)
 		{
 			bool success = true;
+			if (this.attr == null) { this.attr = "fire"; }
 			ushort attrLen = (ushort)Encoding.Unicode.GetBytes(this.attr, 0, this.attr.Length, segment.Array, segment.Offset + count + sizeof(ushort));
 			Array.Copy(BitConverter.GetBytes(attrLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 			count += sizeof(ushort);

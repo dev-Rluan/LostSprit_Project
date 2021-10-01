@@ -6,13 +6,21 @@ public class PlayerManager
 {
     PlayerController _myPlayer;
     Dictionary<int, Player> _players = new Dictionary<int, Player>();
-   
+    
     public static PlayerManager Instance { get; } = new PlayerManager();
     public int PlayerId { get; set; }
     public void Add(S_PlayerList packet)
     {
         Object objB = Resources.Load("bluePlayer");
         Object objR = Resources.Load("redPlayer");
+
+        // Box
+        //Object objCube = Resources.Load("SingleCube5");
+        //GameObject goCube = Object.Instantiate(objCube) as GameObject;
+        //goCube.transform.position = new Vector3(10, 1, 10);
+
+        //_myPlayer.cubeItem = goCube;
+
 
         foreach (S_PlayerList.Player p in packet.players)
         {
@@ -46,8 +54,10 @@ public class PlayerManager
                 }
             }
 
-           
         }
+
+
+
     }
 
     public void EnterGame(S_BroadcastEnterGame packet)
@@ -91,8 +101,7 @@ public class PlayerManager
     }   
     public void Move(S_BroadCastMove packet)
     {
-       
-        
+               
             
         // _myPlayer.transform.position = new Vector3(packet.posX, packet.posY, packet.posZ);
         
@@ -104,5 +113,14 @@ public class PlayerManager
         
             
     }
+    //public void DestroyItem(S_BoradCastDestroyItem packet)
+    //{
+    //    _myPlayer.cubeItem = null;
+
+    //    //S_BoradCastDestroyItem pkt = packet as S_BoradCastDestroyItem;
+    //    //string tag = pkt.item;
+    //    //_myPlayer.DestroyItemEvent(tag);
+    //}
+
 
 }
