@@ -298,7 +298,7 @@ public class PlayerController2 : MonoBehaviour
         {
             Instantiate(itemObj[locitem], itemPos[0].position, Quaternion.identity);
             cntitem[locitem] -= 1;
-
+            nearObject = null;
 
         }
     }

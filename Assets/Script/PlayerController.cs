@@ -56,14 +56,21 @@ public class PlayerController : MonoBehaviour
     public PlayerController WaterPlayer;
     public PlayerController FirePlayer;
     public GameObject Panel;
+    public GameObject UIPanel;
     public GameObject Door;
     public GameObject OpenDoor;
+
+    [SerializeField]
+    private Transform cameraArm;
+    
     
 
     bool isBorder;
     bool eDown;
     bool rDown;
     bool save;
+    bool OneDown;
+    bool TwoDown;
     private int locitem;
     GameObject nearObject;
     Rigidbody rigid;
@@ -98,19 +105,21 @@ public class PlayerController : MonoBehaviour
         Move();
         CameraRotation();
         CharacterRotation();
+        //LookAround();
         Interation();
+        ItemSelect();
         Drop();
-        
+        Debug.Log(nearObject + "  :  " + nearObject.tag + "   : update");
     }
     private void gameOver(string attr)
     {
         switch (attr)
         {
             case "water":
-                Invoke("water", 0.4f);
+                Invoke("water", 0.2f);
                 break;
             case "fire":
-                Invoke("fire", 0.4f);
+                Invoke("fire", 0.2f);
                 break;
         }
         
@@ -129,6 +138,8 @@ public class PlayerController : MonoBehaviour
     {   //키입력 이벤트
         eDown = Input.GetButtonDown("Interation");
         rDown = Input.GetButtonDown("Drop");
+        OneDown = Input.GetButtonDown("One");
+        TwoDown = Input.GetButtonDown("Two");
     }
     private void Move()
     {
@@ -143,21 +154,44 @@ public class PlayerController : MonoBehaviour
         Vector3 v = transform.position + _velocity * Time.deltaTime;
         
         myRigid.MovePosition(v);
+        // 낙사
         if (v.y < -100.0f)
         {
             gameOver(attr);
         } 
+
+        // 서버에 움직임 보내줌
         _network.MovePlayer(v.x, v.y, v.z);
 
     }
+    private void LookAround()
+    {
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector3 camAngle = cameraArm.rotation.eulerAngles;
+        float x = camAngle.x - mouseDelta.y;
 
+        if (x < 180f)
+        {
+            x = Mathf.Clamp(x, -1f, 70f);
+        }
+        else
+        {
+            x = Mathf.Clamp(x, 335f, 361f);
+        }
+
+        cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
+    }
     private void CharacterRotation()
     {//좌우 캐릭터 회전
         float _yRotation = Input.GetAxisRaw("Mouse X");
         Vector3 _characterRotationY = new Vector3(0f, _yRotation, 0f) * lookSensitivity;
         myRigid.MoveRotation(myRigid.rotation * Quaternion.Euler(_characterRotationY));
+
+
+        Quaternion rot = myRigid.rotation;
         //Debug.Log(myRigid.rotation);
         //Debug.Log(myRigid.rotation.eulerAngles);
+
 
     }
     void FreezeRotation() //회전방지(캐릭터가 물체와 닿았을 때 의도치 않게 회전되는 오류현상 방지)
@@ -269,39 +303,39 @@ public class PlayerController : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "FireFloor" && attr == "water")
-        {
-            Invoke("water", 0.4f);
-        }
-        if (collision.gameObject.tag == "WaterFloor" && attr == "fire")
-        {
-            Invoke("fire", 0.4f);
-        }
-        if (collision.gameObject.tag == "PoisonFloor")
-        {
-            if (attr == "water")
-            {
-                Invoke("water", 0.4f);
-            }
-            else if (attr == "fire")
-            {
-                Invoke("fire", 0.4f);
-            }
-        }
+        //if (collision.gameObject.tag == "FireFloor" && attr == "water")
+        //{
+        //    Invoke("water", 0.4f);
+        //}
+        //if (collision.gameObject.tag == "WaterFloor" && attr == "fire")
+        //{
+        //    Invoke("fire", 0.4f);
+        //}
+        //if (collision.gameObject.tag == "PoisonFloor")
+        //{
+        //    if (attr == "water")
+        //    {
+        //        Invoke("water", 0.4f);
+        //    }
+        //    else if (attr == "fire")
+        //    {
+        //        Invoke("fire", 0.4f);
+        //    }
+        //}
     }
     void water()
     {
         Panel.SetActive(true);
         MenuCam.SetActive(true);
         WaterPlayer.gameObject.SetActive(false);
-        FirePlayer.gameObject.SetActive(false);
+        UIPanel.SetActive(false);
         gameObject.transform.position = new Vector3(0, 1, 0);
     }
     void fire()
     {
         Panel.SetActive(true);
         MenuCam.SetActive(true);
-        WaterPlayer.gameObject.SetActive(false);
+        UIPanel.SetActive(false);
         FirePlayer.gameObject.SetActive(false);
         gameObject.transform.position = new Vector3(0, 1, 5);
     }
@@ -317,58 +351,95 @@ public class PlayerController : MonoBehaviour
     {
         if (eDown && nearObject != null)
         {
+            
             if (nearObject.tag == "rockitem")
-            {
-                
-                locitem = 0;
-                cntitem[0] = cntitem[0] + 1;
+            {               
+                cntitem[1] = cntitem[1] + 1;
 
                 //상호작용한 물체를 삭제함
                 Destroy(nearObject);
-
+                Debug.Log(nearObject + "  :  " + nearObject.tag);
+                
                 //_network.DestroyObject("rockitem");
             }
-//&& cntitem[0] != 0
-            if(nearObject.tag == "Door" && cntitem[0] != 0)
+            if (nearObject.tag == "Key")
+            {
+                cntitem[0] = cntitem[0] + 1;
+                Destroy(nearObject);    //상호작용한 물체를 삭제함
+            }
+            //&& cntitem[0] != 0
+            if (nearObject.tag == "Door" && cntitem[0] != 0)
             {
                 OpenDoor.gameObject.SetActive(true);
                 Destroy(Door);
                 //_network.DestroyObject("Door");                
                 
             }
+
+            Debug.Log(nearObject + "  :  " + nearObject.tag + "e");
+        }
+        
+
+    }
+    void ItemSelect()
+    {
+        if (OneDown)
+        {
+            locitem = 0;
+        }
+        if (TwoDown)
+        {
+            locitem = 1;
         }
     }
-  /*  public void DestroyItemEvent(string tag)
-    {
-        if (tag == "rockitem")
-        {  
-            Destroy(cubeItem);
-        }
-        if (tag == "Door")
-        {
-            OpenDoor.gameObject.SetActive(true);
-            Destroy(Door);
-        }
-    }*/
+
+    /*  public void DestroyItemEvent(string tag)
+      {
+          if (tag == "rockitem")
+          {  
+              Destroy(cubeItem);
+          }
+          if (tag == "Door")
+          {
+              OpenDoor.gameObject.SetActive(true);
+              Destroy(Door);
+          }
+      }*/
     void Drop()
     {
         if (rDown && !isBorder && cntitem[locitem] != 0)
         {
             Instantiate(itemObj[locitem], itemPos[0].position, Quaternion.identity);
             cntitem[locitem] -= 1;
-
+            Debug.Log(nearObject + "  :  " + nearObject.tag + "drop");
         }
     }
     
 
     void OnTriggerEnter(Collider other)
     {
-        /*
-    if (other.tag == "rockitem")     //아이템과 닿았을 때
-    {
-            Invoke("fire", 0.4f);
-    }
-        */
+
+        if (other.tag == "FireFloor" && attr == "water")     //아이템과 닿았을 때
+        {
+            Invoke("fire", 0.2f);
+        }
+        if (other.tag == "WaterFloor" && attr == "fire")
+        {
+            Invoke("water", 0.2f);
+        }       
+
+        if (other.tag == "PoisonFloor")
+        {
+            if (attr == "water")
+            {
+                Invoke("water", 0.2f);
+            }
+            else if (attr == "fire")
+            {
+                Invoke("fire", 0.2f);
+            }
+        }
+       
     }
     void OnTriggerStay(Collider other)
     {
@@ -376,6 +447,13 @@ public class PlayerController : MonoBehaviour
             nearObject = other.gameObject;
         else if (other.tag == "Door")
             nearObject = other.gameObject;
+        else if (other.tag == "Key")
+            nearObject = other.gameObject;
+            
+    }
+    void OnTriggerExit(Collider other)
+    {
+        nearObject = null;
     }
 }
 
