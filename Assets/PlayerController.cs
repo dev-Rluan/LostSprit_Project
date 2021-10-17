@@ -115,6 +115,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log(myRigid.rotation.eulerAngles);
 
     }
+    /*
 <<<<<<< Updated upstream
     void StopToWall()   //벽에 닿았을 시 이동제한
     {
@@ -124,7 +125,8 @@ public class PlayerController : MonoBehaviour
         isBorder = Physics.Raycast(transform.position, transform.forward, 2, LayerMask.GetMask("Wall"));
     }
 =======
->>>>>>> Stashed changes
+    */
+
     void FreezeRotation() //회전방지(캐릭터가 물체와 닿았을 때 의도치 않게 회전되는 오류현상 방지)
     {
         myRigid.angularVelocity = Vector3.zero;   //회전속도를 0으로 바꿈 > 스스로 도는현상 X 
