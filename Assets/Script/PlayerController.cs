@@ -105,8 +105,9 @@ public class PlayerController : MonoBehaviour
         TryJump();
         TryCrouch();
         Move();
-        CameraRotation();
+        //CameraRotation();
         CharacterRotation();
+        LookAround();
         //LookAround();
         Interation();
         ItemSelect();
@@ -168,23 +169,8 @@ public class PlayerController : MonoBehaviour
             _network.MovePlayer(v.x, v.y, v.z);
         }
     }
-    private void LookAround()
-    {
-        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        Vector3 camAngle = cameraArm.rotation.eulerAngles;
-        float x = camAngle.x - mouseDelta.y;
 
-        if (x < 180f)
-        {
-            x = Mathf.Clamp(x, -1f, 70f);
-        }
-        else
-        {
-            x = Mathf.Clamp(x, 335f, 361f);
-        }
-
-        cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
-    }
+    
     private void CharacterRotation()
     {//좌우 캐릭터 회전
         float _yRotation = Input.GetAxisRaw("Mouse X");
@@ -206,6 +192,23 @@ public class PlayerController : MonoBehaviour
     {
         FreezeRotation();
         StopToWall();
+    }
+    private void LookAround()
+    {
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector3 camAngle = cameraArm.rotation.eulerAngles;
+        float x = camAngle.x - mouseDelta.y;
+
+        if (x < 180f)
+        {
+            x = Mathf.Clamp(x, -1f, 70f);
+        }
+        else
+        {
+            x = Mathf.Clamp(x, 335f, 361f);
+        }
+
+        cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
     }
     private void CameraRotation()
     {//상하 카메라 회전
