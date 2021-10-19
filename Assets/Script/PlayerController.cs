@@ -62,9 +62,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private Transform cameraArm;
-    
-    
 
+
+    bool ischeck;
     bool isBorder;
     bool eDown;
     bool rDown;
@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
     private int locitem;
     GameObject nearObject;
     Rigidbody rigid;
+    Material mat;
 
     NetworkManager _network;
 
@@ -85,6 +86,7 @@ public class PlayerController : MonoBehaviour
     {
         capsuleCollider = GetComponent<CapsuleCollider>();
         myRigid = GetComponent<Rigidbody>();
+        mat = GetComponent<MeshRenderer>().material;
         applySpeed = walkSpeed;
 
         originPosY = theCamera.transform.localPosition.y;
@@ -109,7 +111,7 @@ public class PlayerController : MonoBehaviour
         Interation();
         ItemSelect();
         Drop();
-        Debug.Log(nearObject + "  :  " + nearObject.tag + "   : update");
+       // Debug.Log(nearObject + "  :  " + nearObject.tag + "   : update");
     }
     private void gameOver(string attr)
     {
@@ -143,26 +145,28 @@ public class PlayerController : MonoBehaviour
     }
     private void Move()
     {
-        float _moveDirX = Input.GetAxisRaw("Horizontal");
-        float _moveDirZ = Input.GetAxisRaw("Vertical");
-
-        Vector3 _moveHorizontal = transform.right * _moveDirX;
-        Vector3 _moveVertical = transform.forward * _moveDirZ;
-
-        Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * applySpeed;       
-
-        Vector3 v = transform.position + _velocity * Time.deltaTime;
-        
-        myRigid.MovePosition(v);
-        // 낙사
-        if (v.y < -100.0f)
+        if (!ischeck)
         {
-            gameOver(attr);
-        } 
+            float _moveDirX = Input.GetAxisRaw("Horizontal");
+            float _moveDirZ = Input.GetAxisRaw("Vertical");
 
-        // 서버에 움직임 보내줌
-        _network.MovePlayer(v.x, v.y, v.z);
+            Vector3 _moveHorizontal = transform.right * _moveDirX;
+            Vector3 _moveVertical = transform.forward * _moveDirZ;
 
+            Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * applySpeed;
+
+            Vector3 v = transform.position + _velocity * Time.deltaTime;
+
+            myRigid.MovePosition(v);
+            // 낙사
+            if (v.y < -100.0f)
+            {
+                gameOver(attr);
+            }
+
+            // 서버에 움직임 보내줌
+            _network.MovePlayer(v.x, v.y, v.z);
+        }
     }
     private void LookAround()
     {
@@ -376,7 +380,7 @@ public class PlayerController : MonoBehaviour
                 
             }
 
-            Debug.Log(nearObject + "  :  " + nearObject.tag + "e");
+            //Debug.Log(nearObject + "  :  " + nearObject.tag + "e");
         }
         
 
@@ -411,7 +415,7 @@ public class PlayerController : MonoBehaviour
         {
             Instantiate(itemObj[locitem], itemPos[0].position, Quaternion.identity);
             cntitem[locitem] -= 1;
-            Debug.Log(nearObject + "  :  " + nearObject.tag + "drop");
+           // Debug.Log(nearObject + "  :  " + nearObject.tag + "drop");
         }
     }
     
@@ -439,7 +443,10 @@ public class PlayerController : MonoBehaviour
                 Invoke("fire", 0.2f);
             }
         }
-       
+        if(other.tag == "WaitFloor")
+        {
+            ischeck = true;
+        }
     }
     void OnTriggerStay(Collider other)
     {
@@ -449,11 +456,14 @@ public class PlayerController : MonoBehaviour
             nearObject = other.gameObject;
         else if (other.tag == "Key")
             nearObject = other.gameObject;
-            
+        else if (other.tag == "WaitFloor")
+            nearObject = other.gameObject;
+
     }
     void OnTriggerExit(Collider other)
     {
         nearObject = null;
+        ischeck = false;
     }
 }
 

@@ -10,6 +10,11 @@ TagManager:
   - rockitem
   - Floor
   - Door
+  - Key
+  - puzzleitem
+  - waterplayer
+  - fireplayer
+  - WaitFloor
   layers:
   - Default
   - TransparentFX
