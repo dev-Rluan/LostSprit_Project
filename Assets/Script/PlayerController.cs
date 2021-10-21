@@ -107,8 +107,9 @@ public class PlayerController : MonoBehaviour
         TryJump();
         TryCrouch();
         Move();
-        CameraRotation();
+        //CameraRotation();
         CharacterRotation();
+        LookAround();
         //LookAround();
         Interation();
         ItemSelect();
@@ -151,6 +152,7 @@ public class PlayerController : MonoBehaviour
         {
             float _moveDirX = Input.GetAxisRaw("Horizontal");
             float _moveDirZ = Input.GetAxisRaw("Vertical");
+<<<<<<< HEAD
 
             Vector3 _moveHorizontal = transform.right * _moveDirX;
             Vector3 _moveVertical = transform.forward * _moveDirZ;
@@ -175,18 +177,29 @@ public class PlayerController : MonoBehaviour
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         Vector3 camAngle = cameraArm.rotation.eulerAngles;
         float x = camAngle.x - mouseDelta.y;
+=======
 
-        if (x < 180f)
-        {
-            x = Mathf.Clamp(x, -1f, 70f);
-        }
-        else
-        {
-            x = Mathf.Clamp(x, 335f, 361f);
-        }
+            Vector3 _moveHorizontal = transform.right * _moveDirX;
+            Vector3 _moveVertical = transform.forward * _moveDirZ;
 
-        cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
+            Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * applySpeed;
+
+            Vector3 v = transform.position + _velocity * Time.deltaTime;
+
+            myRigid.MovePosition(v);
+            // 낙사
+            if (v.y < -100.0f)
+            {
+                gameOver(attr);
+            }
+>>>>>>> 95a9e4e787eb69c760448250289d0a60164ce28c
+
+            // 서버에 움직임 보내줌
+            _network.MovePlayer(v.x, v.y, v.z);
+        }
     }
+
+    
     private void CharacterRotation()
     {//좌우 캐릭터 회전
         float _yRotation = Input.GetAxisRaw("Mouse X");
@@ -210,6 +223,23 @@ public class PlayerController : MonoBehaviour
     {
         FreezeRotation();
         StopToWall();
+    }
+    private void LookAround()
+    {
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector3 camAngle = cameraArm.rotation.eulerAngles;
+        float x = camAngle.x - mouseDelta.y;
+
+        if (x < 180f)
+        {
+            x = Mathf.Clamp(x, -1f, 70f);
+        }
+        else
+        {
+            x = Mathf.Clamp(x, 335f, 361f);
+        }
+
+        cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
     }
     private void CameraRotation()
     {//상하 카메라 회전
