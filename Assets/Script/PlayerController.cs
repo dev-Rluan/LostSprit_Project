@@ -77,11 +77,12 @@ public class PlayerController : MonoBehaviour
     Material mat;
 
     NetworkManager _network;
-
+   
     public MyPlayer myPlayer;
     public int PlayerId { get; set; }
     //public GameObject cubeItem { get; set; }
     // Start is called before the first frame update
+   
     void Start()
     {
         capsuleCollider = GetComponent<CapsuleCollider>();
@@ -93,6 +94,7 @@ public class PlayerController : MonoBehaviour
         applyCrouchPosY = originPosY;
 
         _network = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
+       
         startGame();
     }
 
@@ -105,9 +107,8 @@ public class PlayerController : MonoBehaviour
         TryJump();
         TryCrouch();
         Move();
-        //CameraRotation();
+        CameraRotation();
         CharacterRotation();
-        LookAround();
         //LookAround();
         Interation();
         ItemSelect();
@@ -169,30 +170,6 @@ public class PlayerController : MonoBehaviour
             _network.MovePlayer(v.x, v.y, v.z);
         }
     }
-
-    
-    private void CharacterRotation()
-    {//좌우 캐릭터 회전
-        float _yRotation = Input.GetAxisRaw("Mouse X");
-        Vector3 _characterRotationY = new Vector3(0f, _yRotation, 0f) * lookSensitivity;
-        myRigid.MoveRotation(myRigid.rotation * Quaternion.Euler(_characterRotationY));
-
-
-        Quaternion rot = myRigid.rotation;
-        //Debug.Log(myRigid.rotation);
-        //Debug.Log(myRigid.rotation.eulerAngles);
-
-
-    }
-    void FreezeRotation() //회전방지(캐릭터가 물체와 닿았을 때 의도치 않게 회전되는 오류현상 방지)
-    {
-        myRigid.angularVelocity = Vector3.zero;   //회전속도를 0으로 바꿈 > 스스로 도는현상 X 
-    }
-    void FixedUpdate()  //함수실행
-    {
-        FreezeRotation();
-        StopToWall();
-    }
     private void LookAround()
     {
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
@@ -209,6 +186,30 @@ public class PlayerController : MonoBehaviour
         }
 
         cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
+    }
+    private void CharacterRotation()
+    {//좌우 캐릭터 회전
+        float _yRotation = Input.GetAxisRaw("Mouse X");
+        Vector3 _characterRotationY = new Vector3(0f, _yRotation, 0f) * lookSensitivity;
+        myRigid.MoveRotation(myRigid.rotation * Quaternion.Euler(_characterRotationY));
+
+
+        Quaternion rot = myRigid.rotation;
+
+        _network.RotPlayer(rot.x, rot.y, rot.z, rot.w);
+        //Debug.Log(myRigid.rotation);
+        //Debug.Log(myRigid.rotation.eulerAngles);
+
+
+    }
+    void FreezeRotation() //회전방지(캐릭터가 물체와 닿았을 때 의도치 않게 회전되는 오류현상 방지)
+    {
+        myRigid.angularVelocity = Vector3.zero;   //회전속도를 0으로 바꿈 > 스스로 도는현상 X 
+    }
+    void FixedUpdate()  //함수실행
+    {
+        FreezeRotation();
+        StopToWall();
     }
     private void CameraRotation()
     {//상하 카메라 회전
@@ -366,13 +367,14 @@ public class PlayerController : MonoBehaviour
                 //상호작용한 물체를 삭제함
                 Destroy(nearObject);
                 Debug.Log(nearObject + "  :  " + nearObject.tag);
-                
-                //_network.DestroyObject("rockitem");
+
+                _network.DestroyObject(1);
             }
             if (nearObject.tag == "Key")
             {
                 cntitem[0] = cntitem[0] + 1;
                 Destroy(nearObject);    //상호작용한 물체를 삭제함
+                _network.DestroyObject(2);
             }
             //&& cntitem[0] != 0
             if (nearObject.tag == "Door" && cntitem[0] != 0)
@@ -444,6 +446,11 @@ public class PlayerController : MonoBehaviour
             else if (attr == "fire")
             {
                 Invoke("fire", 0.2f);
+
+                if (PlayerManager.Instance.getObject(1) != null)
+                {
+
+                }
             }
         }
         if(other.tag == "WaitFloor")

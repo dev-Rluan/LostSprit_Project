@@ -9,13 +9,17 @@ using UnityEngine;
 public class NetworkManager : MonoBehaviour
 {
 	ServerSession _session = new ServerSession();
-
+	
 	public void Send(ArraySegment<byte> senBuff)
     {
 		_session.Send(senBuff);
     }
-    void Start()
+	
+
+	void Start()
     {
+		GameManager gm = GetComponent<GameManager>();
+		PlayerController PC = GetComponent<PlayerController>();
 		// DNS (Domain Name System)
 		string host = Dns.GetHostName();
 		IPHostEntry ipHost = Dns.GetHostEntry(host);
@@ -31,8 +35,7 @@ public class NetworkManager : MonoBehaviour
 
     void Update()
     {
-		List<IPacket> list = PacketQueue.Instance.PopAll();
-		
+		List<IPacket> list = PacketQueue.Instance.PopAll();		
 		
 		foreach (IPacket packet in list)
 		{
@@ -68,10 +71,19 @@ public class NetworkManager : MonoBehaviour
 		movePacket.posZ = posZ;
 		Send(movePacket.Write());
 	}
-	public void DestroyObject(String tag)
+	public void RotPlayer(float rotX, float rotY, float rotZ, float rotW)
+    {
+		C_Rot rotPacket = new C_Rot();
+		rotPacket.rotX = rotX;
+		rotPacket.rotY = rotY;
+		rotPacket.rotZ = rotZ;
+		rotPacket.rotW = rotW;
+		Send(rotPacket.Write());
+	}
+	public void DestroyObject(int item)
     {
 		C_DestroyItem packet = new C_DestroyItem();
-		packet.item = tag;
+		packet.itemID = item;
 		Send(packet.Write());
 	}
 

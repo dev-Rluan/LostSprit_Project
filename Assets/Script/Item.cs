@@ -12,6 +12,8 @@ public class Item : MonoBehaviour
 
     void Awake()    //초기화
     {
+        PuzzleEvent tr = GetComponent<PuzzleEvent>();
+
         rigid = GetComponent<Rigidbody>();
         //오브젝트의 콜라이더중 첫번째것만 가져오므로 is Trigger가 포함되지 않은 콜라이더가 위로 올라가야함
         //sphereCollider = GetComponent<SphereCollider>();
@@ -28,6 +30,7 @@ public class Item : MonoBehaviour
         {
             rigid.isKinematic = true;   //더이상 외부 물리효과에 의해서 움직이지 못함
                                         // sphereCollider.enabled = false;
+
         }
     }
 }
