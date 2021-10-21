@@ -15,9 +15,19 @@ public class GameManager : MonoBehaviour
     public Image Img1;
     public Image Img2;
     public Transform[] PuzzlePos;
+<<<<<<< HEAD
     public GameObject Puzzleitem;
 
     public ObjectNum objNum;
+=======
+<<<<<<< HEAD
+    public GameObject Puzzleitem;
+
+    public ObjectNum objNum;
+=======
+    public GameObject[] Puzzleitem;
+>>>>>>> 95a9e4e787eb69c760448250289d0a60164ce28c
+>>>>>>> 68f2759ef303b1cef8d58578bff0d3f9dac0b6cf
 
     bool isInstantiate = false;
 
@@ -32,6 +42,10 @@ public class GameManager : MonoBehaviour
         WaterPlayer.gameObject.SetActive(false);
         Img1.color = new Color(1, 1, 1, 0);
         Img2.color = new Color(1, 1, 1, 0);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 68f2759ef303b1cef8d58578bff0d3f9dac0b6cf
         //if (!isInstantiate)
         //{
         //    for (int i = 0; i < 4; i++)
@@ -41,6 +55,16 @@ public class GameManager : MonoBehaviour
         //    isInstantiate = true;
         //}
        
+<<<<<<< HEAD
+=======
+=======
+        isInstantiate = true;
+        for (int i = 0; i < 4; i++)
+        {
+            Instantiate(Puzzleitem[0], PuzzlePos[i].position, Quaternion.identity);
+        }
+>>>>>>> 95a9e4e787eb69c760448250289d0a60164ce28c
+>>>>>>> 68f2759ef303b1cef8d58578bff0d3f9dac0b6cf
 
     }
     public void GameStartWater()
@@ -53,6 +77,10 @@ public class GameManager : MonoBehaviour
         WaterPlayer.gameObject.SetActive(true);
         Img1.color = new Color(1, 1, 1, 0);
         Img2.color = new Color(1, 1, 1, 0);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 68f2759ef303b1cef8d58578bff0d3f9dac0b6cf
         //if (!isInstantiate)
         //{
         //    for (int i = 0; i < 4; i++)
@@ -61,6 +89,18 @@ public class GameManager : MonoBehaviour
         //    }
         //    isInstantiate = true;
         //}
+<<<<<<< HEAD
+=======
+=======
+        if (!isInstantiate)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                Instantiate(Puzzleitem[0], PuzzlePos[i].position, Quaternion.identity);
+            }
+        }
+>>>>>>> 95a9e4e787eb69c760448250289d0a60164ce28c
+>>>>>>> 68f2759ef303b1cef8d58578bff0d3f9dac0b6cf
     }
     void LateUpdate()   //Update() 가 끝난 후 호출됨
     {

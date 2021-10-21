@@ -1,5 +1,17 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+guid: 66eae279359d6134cbe365412b11d6bd
+=======
+<<<<<<< HEAD
 guid: cb3ce5e7b993f0f42925d696bcfeec6a
+=======
+<<<<<<< HEAD:Assets/Script/Resources/stay cube.prefab.meta
+guid: 56fdbddecd8754741a5be2a5eb584589
+=======
+guid: cb3ce5e7b993f0f42925d696bcfeec6a
+>>>>>>> 95a9e4e787eb69c760448250289d0a60164ce28c:Assets/Script/Resources/Puzzle Cube.prefab.meta
+>>>>>>> 95a9e4e787eb69c760448250289d0a60164ce28c
+>>>>>>> 68f2759ef303b1cef8d58578bff0d3f9dac0b6cf
 PrefabImporter:
   externalObjects: {}
   userData: 

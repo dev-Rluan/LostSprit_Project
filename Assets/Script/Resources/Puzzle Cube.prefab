@@ -112,7 +112,15 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
+<<<<<<< HEAD:Assets/Script/Resources/Puzzle Cube.prefab
   m_Size: {x: 1.8, y: 2.5, z: 1.8}
+=======
+<<<<<<< HEAD
+  m_Size: {x: 1.8, y: 2.5, z: 1.8}
+=======
+  m_Size: {x: 2.5, y: 2.5, z: 2.5}
+>>>>>>> 95a9e4e787eb69c760448250289d0a60164ce28c
+>>>>>>> 68f2759ef303b1cef8d58578bff0d3f9dac0b6cf:Assets/EXPrefabs/Puzzle Cube.prefab
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &812978093602134676
 BoxCollider:
