@@ -7,6 +7,7 @@ using UnityEngine;
 
 class PacketHandler
 {
+	
 	// 내가 입장한 상태에서 다른사람이 들어왔을때 추가
 	public static void S_BroadcastEnterGameHandler(PacketSession session, IPacket packet)
 	{
@@ -44,13 +45,22 @@ class PacketHandler
 
 		PlayerManager.Instance.Move(pkt);
 	}
+	public static void S_BroadCastRotHandler(PacketSession session, IPacket packet)
+	{
+		S_BroadCastRot pkt = packet as S_BroadCastRot;
+		ServerSession serverSession = session as ServerSession;
+
+		PlayerManager.Instance.Rot(pkt);
+
+
+	}
 
 	public static void S_BoradCastDestroyItemHandler(PacketSession session, IPacket packet)
 	{
         S_BoradCastDestroyItem pkt = packet as S_BoradCastDestroyItem;
         ServerSession serverSession = session as ServerSession;
 
-        //PlayerManager.Instance.DestroyItem(pkt);
+        PlayerManager.Instance.DestroyItem(pkt);
 
     }
 	public static void S_BroadCastGameOverHandler(PacketSession session, IPacket packet)
@@ -59,6 +69,13 @@ class PacketHandler
 		ServerSession serverSession = session as ServerSession;
 
 		
+	}
+	public static void S_BroadCastDropItemHandler(PacketSession session, IPacket packet)
+	{
+		S_BroadCastGameOver pkt = packet as S_BroadCastGameOver;
+		ServerSession serverSession = session as ServerSession;
+
+
 	}
 
 

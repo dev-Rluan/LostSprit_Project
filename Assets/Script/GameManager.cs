@@ -14,6 +14,12 @@ public class GameManager : MonoBehaviour
     public GameObject UIPanel;
     public Image Img1;
     public Image Img2;
+    public Transform[] PuzzlePos;
+    public GameObject Puzzleitem;
+
+    public ObjectNum objNum;
+
+    bool isInstantiate = false;
 
 
     public void GameStartFire()
@@ -26,7 +32,15 @@ public class GameManager : MonoBehaviour
         WaterPlayer.gameObject.SetActive(false);
         Img1.color = new Color(1, 1, 1, 0);
         Img2.color = new Color(1, 1, 1, 0);
-
+        //if (!isInstantiate)
+        //{
+        //    for (int i = 0; i < 4; i++)
+        //    {
+        //        Instantiate(Puzzleitem, PuzzlePos[i].position, Quaternion.identity);
+        //    }
+        //    isInstantiate = true;
+        //}
+       
 
     }
     public void GameStartWater()
@@ -39,6 +53,14 @@ public class GameManager : MonoBehaviour
         WaterPlayer.gameObject.SetActive(true);
         Img1.color = new Color(1, 1, 1, 0);
         Img2.color = new Color(1, 1, 1, 0);
+        //if (!isInstantiate)
+        //{
+        //    for (int i = 0; i < 4; i++)
+        //    {
+        //        Instantiate(Puzzleitem, PuzzlePos[i].position, Quaternion.identity);
+        //    }
+        //    isInstantiate = true;
+        //}
     }
     void LateUpdate()   //Update() 가 끝난 후 호출됨
     {
