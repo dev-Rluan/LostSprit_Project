@@ -10,6 +10,8 @@ public class PlayerManager
     
     Dictionary<int, Player> _players = new Dictionary<int, Player>();
     Dictionary<int, ObjectNum> _objects = new Dictionary<int, ObjectNum>();
+
+    
     public ObjectNum getObject(int num)
     {
         if (_objects.TryGetValue(num, out ObjectNum obj))
@@ -82,37 +84,44 @@ public class PlayerManager
         go1 = Object.Instantiate(objBox) as GameObject;
         ObjectNum Box = go1.AddComponent<ObjectNum>();
         Box.transform.position = new Vector3(10, 1, 10);
+        Box.objectID = 1;
         _objects.Add(1, Box);
 
         go2 = Object.Instantiate(objKey) as GameObject;
         ObjectNum Key = go2.AddComponent<ObjectNum>();
         Key.transform.position = new Vector3(60, -1, 7);
+        Key.objectID = 2;
         _objects.Add(2, Key);
 
         go3 = Object.Instantiate(objPuzzleCube) as GameObject;
         ObjectNum PuzzleCube1 = go3.AddComponent<ObjectNum>();
         PuzzleCube1.transform.position = new Vector3(222, 29, 10);
+        PuzzleCube1.objectID = 3;
         _objects.Add(3, PuzzleCube1);
 
         go4 = Object.Instantiate(objPuzzleCube) as GameObject;
         ObjectNum PuzzleCube2 = go4.AddComponent<ObjectNum>();
         PuzzleCube2.transform.position = new Vector3(222, 29, 12);
+        PuzzleCube2.objectID = 4;
         _objects.Add(4, PuzzleCube2);
 
         go5 = Object.Instantiate(objPuzzleCube) as GameObject;
         ObjectNum PuzzleCube3 = go5.AddComponent<ObjectNum>();
         PuzzleCube3.transform.position = new Vector3(220, 29, 12);
+        PuzzleCube3.objectID = 5;
         _objects.Add(5, PuzzleCube3);
 
         go6 = Object.Instantiate(objPuzzleCube) as GameObject;
         ObjectNum PuzzleCube4 = go6.AddComponent<ObjectNum>();
         PuzzleCube4.transform.position = new Vector3(220, 29, 10);
+        PuzzleCube4.objectID = 6;
         _objects.Add(6, PuzzleCube4);
 
         go7 = Object.Instantiate(objDoor) as GameObject;
         ObjectNum Door = go6.AddComponent<ObjectNum>();
         Door.transform.position = new Vector3((float)28, (float)32.71142, (float)-6.67);
         Door.transform.rotation = Quaternion.Euler(0, 90, 0);
+        Door.objectID = 7;
         _objects.Add(7, Door);
 
     }

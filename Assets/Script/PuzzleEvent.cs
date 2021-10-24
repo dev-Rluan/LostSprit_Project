@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PuzzleEvent : MonoBehaviour
 {
+    public int ObjectID { get; set; }
     // Start is called before the first frame update
     void Start()
     {

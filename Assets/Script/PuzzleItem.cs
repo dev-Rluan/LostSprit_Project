@@ -10,9 +10,12 @@ public class PuzzleItem : MonoBehaviour
     Rigidbody rigid;
     //SphereCollider sphereCollider;
     Material mat;
+    PuzzleEvent puzzleEvent;
 
     void Awake()    //초기화
     {
+        puzzleEvent = GetComponent<PuzzleEvent>();
+
         rigid = GetComponent<Rigidbody>();
         mat = GetComponent<MeshRenderer>().material;
         //오브젝트의 콜라이더중 첫번째것만 가져오므로 is Trigger가 포함되지 않은 콜라이더가 위로 올라가야함
@@ -23,7 +26,7 @@ public class PuzzleItem : MonoBehaviour
     {
 
     }
-
+    
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "rockItem")
@@ -39,5 +42,6 @@ public class PuzzleItem : MonoBehaviour
         {
             mat.color = Color.blue;
         }
+        
     }
 }

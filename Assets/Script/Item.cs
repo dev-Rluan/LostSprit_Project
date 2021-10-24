@@ -31,6 +31,6 @@ public class Item : MonoBehaviour
             rigid.isKinematic = true;   //더이상 외부 물리효과에 의해서 움직이지 못함
                                         // sphereCollider.enabled = false;
 
-        }
+        } 
     }
 }

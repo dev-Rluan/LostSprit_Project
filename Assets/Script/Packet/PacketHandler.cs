@@ -15,7 +15,7 @@ class PacketHandler
 		ServerSession serverSession = session as ServerSession;
 
 		PlayerManager.Instance.EnterGame(pkt);
-
+		
 
 	}
 	// 누군가가 나갔을때
