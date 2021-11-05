@@ -26,11 +26,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2599195175537784481}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.03999949, y: 1.1799998, z: -4.8700037}
+  m_LocalPosition: {x: 0.03999949, y: 1.1800003, z: -6.870011}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2599195175558246949}
-  m_RootOrder: 1
+  m_Father: {fileID: 2599195175679887582}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &2599195175537784486
 Camera:
@@ -116,7 +116,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2599195175679887582}
-  - {fileID: 2599195175537784484}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -251,7 +250,7 @@ MonoBehaviour:
   UIPanel: {fileID: 0}
   Door: {fileID: 0}
   OpenDoor: {fileID: 0}
-  cameraArm: {fileID: 0}
+  cameraArm: {fileID: 2599195175679887582}
   myPlayer: {fileID: 0}
 --- !u!1 &2599195175679887577
 GameObject:
@@ -279,7 +278,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2599195175537784484}
   m_Father: {fileID: 2599195175558246949}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
