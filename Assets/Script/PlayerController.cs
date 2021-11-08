@@ -120,10 +120,10 @@ public class PlayerController : MonoBehaviour
         switch (attr)
         {
             case "water":
-                Invoke("water", 0.2f);
+                Invoke("water", 0.1f);
                 break;
             case "fire":
-                Invoke("fire", 0.2f);
+                Invoke("fire", 0.1f);
                 break;
         }
         
@@ -366,8 +366,8 @@ public class PlayerController : MonoBehaviour
     {
         Panel.SetActive(true);
         MenuCam.SetActive(true);
-        UIPanel.SetActive(false);
         FirePlayer.gameObject.SetActive(false);
+        UIPanel.SetActive(false);
         gameObject.transform.position = new Vector3(0, 1, 5);
     }
 
