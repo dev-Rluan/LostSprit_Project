@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour
         applyCrouchPosY = originPosY;
 
         _network = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
-       
+        _network.Login("waterPlayer", "1234");
         startGame();
     }
 
@@ -132,10 +132,17 @@ public class PlayerController : MonoBehaviour
 
     private void startGame()
     {
-        if(attr == "fire")  
-            _network. FirePlayerStart();
+        if(attr == "fire")
+        {
+            _network.FirePlayerStart();
+           
+        }
+            
         else if(attr == "water")
+        {
             _network.WaterPlayerStart();
+        }
+          
     }
 
     void GetInput()

@@ -55,12 +55,12 @@ class PacketHandler
 
 	}
 
-	public static void S_BoradCastDestroyItemHandler(PacketSession session, IPacket packet)
+	public static void S_BroadCastDestroyItemHandler(PacketSession session, IPacket packet)
 	{
-        S_BoradCastDestroyItem pkt = packet as S_BoradCastDestroyItem;
+        S_BroadCastDestroyItem pkt = packet as S_BroadCastDestroyItem;
         ServerSession serverSession = session as ServerSession;
 
-        PlayerManager.Instance.DestroyItem(pkt);
+        
 
     }
 	public static void S_BroadCastGameOverHandler(PacketSession session, IPacket packet)

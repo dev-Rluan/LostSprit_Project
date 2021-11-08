@@ -20,11 +20,11 @@ public class GameManager : MonoBehaviour
     public ObjectNum objNum;
 
     bool isInstantiate = false;
-
+    NetworkManager _network = null;
 
     public void GameStartFire()
     {
-
+        
         StartMenu.SetActive(false);
         UIPanel.SetActive(true);
         MenuCam.SetActive(false);        
@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
         WaterPlayer.gameObject.SetActive(false);
         Img1.color = new Color(1, 1, 1, 0);
         Img2.color = new Color(1, 1, 1, 0);
+        
         //if (!isInstantiate)
         //{
         //    for (int i = 0; i < 4; i++)
@@ -40,12 +41,11 @@ public class GameManager : MonoBehaviour
         //    }
         //    isInstantiate = true;
         //}
-       
+
 
     }
     public void GameStartWater()
-    {
-
+    {        
         StartMenu.SetActive(false);
         UIPanel.SetActive(true);
         MenuCam.SetActive(false);
@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
         WaterPlayer.gameObject.SetActive(true);
         Img1.color = new Color(1, 1, 1, 0);
         Img2.color = new Color(1, 1, 1, 0);
+       
         //if (!isInstantiate)
         //{
         //    for (int i = 0; i < 4; i++)

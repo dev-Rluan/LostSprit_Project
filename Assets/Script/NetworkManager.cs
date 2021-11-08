@@ -14,8 +14,6 @@ public class NetworkManager : MonoBehaviour
     {
 		_session.Send(senBuff);
     }
-	
-
 	void Start()
     {
 		GameManager gm = GetComponent<GameManager>();
@@ -43,6 +41,15 @@ public class NetworkManager : MonoBehaviour
 			
 		}		
     }
+
+	public void Login(string id, string pwd)
+    {
+		C_Login loginPacket = new C_Login();
+		loginPacket.id = id;
+		loginPacket.pwd = pwd;
+		Send(loginPacket.Write());
+    }
+
 	public void FirePlayerStart()
 	{
 		C_Enter enterPacket = new C_Enter();
@@ -55,7 +62,7 @@ public class NetworkManager : MonoBehaviour
 
 	public void WaterPlayerStart()
 	{
-		C_Enter enterPacket = new C_Enter();
+		C_Enter enterPacket = new C_Enter();		
 		enterPacket.attr = "water";
 		enterPacket.posX = 0;
 		enterPacket.posY = 1;
@@ -83,7 +90,7 @@ public class NetworkManager : MonoBehaviour
 	public void DestroyObject(int item)
     {
 		C_DestroyItem packet = new C_DestroyItem();
-		packet.itemID = item;
+		packet.itemId = item;
 		Send(packet.Write());
 	}
 
@@ -92,5 +99,6 @@ public class NetworkManager : MonoBehaviour
 		C_GameOver packet = new C_GameOver();
 		Send(packet.Write());
     }
+
 
 }
