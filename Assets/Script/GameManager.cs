@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         FirePlayer.gameObject.SetActive(true);
         WaterPlayer.gameObject.SetActive(false);
         Img1.color = new Color(1, 1, 1, 0);
-        Img2.color = new Color(1, 1, 1, 0);
+        Img2.color = new Color(1, 1, 1, 0); 
         
         //if (!isInstantiate)
         //{
