@@ -15,6 +15,12 @@ TagManager:
   - waterplayer
   - fireplayer
   - WaitFloor
+  - monster
+  - MirrorDoor
+  - trigger
+  - puzzleitem2
+  - FireFloor2
+  - WaterFloor2
   layers:
   - Default
   - TransparentFX

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int PlayerId { get; set; }
+    public string PlayerId { get; set; }
+    public int ReadyState { get; set; }
+    
     // Start is called before the first frame update
     void Start()
     {

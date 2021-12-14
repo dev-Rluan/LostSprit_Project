@@ -317,9 +317,10 @@ MonoBehaviour:
   FirePlayer: {fileID: 0}
   Panel: {fileID: 0}
   UIPanel: {fileID: 0}
-  Door: {fileID: 6295543547566437701, guid: 66eae279359d6134cbe365412b11d6bd, type: 3}
   OpenDoor: {fileID: 0}
   cameraArm: {fileID: 0}
+  ischeck: 0
+  stagecheck: 0
   myPlayer: {fileID: 0}
 --- !u!1 &9087825485146755782
 GameObject:

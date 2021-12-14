@@ -41,7 +41,7 @@ public class PlayerController2 : MonoBehaviour
     [SerializeField]
     private float jumpForce;
 
-    private bool isRun = false;
+    private bool isRun = false; 
     private bool isCrouch = false;
     private bool isGround = true;
 

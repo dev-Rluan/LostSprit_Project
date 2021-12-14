@@ -6,11 +6,15 @@ public class PuzzleItem : MonoBehaviour
 {
     public enum Type { rockitem };
     public Type type;
+    public bool redstatus = false;
+    public bool bluestatus = false;
+
 
     Rigidbody rigid;
     //SphereCollider sphereCollider;
     Material mat;
     PuzzleEvent puzzleEvent;
+    GameObject nearObject;
 
     void Awake()    //초기화
     {
@@ -34,6 +38,7 @@ public class PuzzleItem : MonoBehaviour
             rigid.isKinematic = true;   //더이상 외부 물리효과에 의해서 움직이지 못함
                                         // sphereCollider.enabled = false;
         }
+        /*
         if (collision.gameObject.tag == "fireplayer")
         {
             mat.color = Color.red;
@@ -42,6 +47,39 @@ public class PuzzleItem : MonoBehaviour
         {
             mat.color = Color.blue;
         }
+        */
         
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "fireplayer")
+        {
+            redstatus = true;
+            mat.color = Color.red;
+            bluestatus = false;
+        }
+        if (other.tag == "waterplayer")
+        {
+            bluestatus = true;
+            mat.color = Color.blue;
+            redstatus = false;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "fireplayer")
+            nearObject = other.gameObject;
+
+        if (other.tag == "waterplayer")
+            nearObject = other.gameObject;
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        nearObject = null;
+    }
+
+
 }

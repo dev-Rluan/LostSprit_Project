@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     public Transform[] itemPos;
 
     [SerializeField]
-    private string attr;
+    public string attr;
 
     [SerializeField]
     private float walkSpeed;
@@ -57,14 +57,16 @@ public class PlayerController : MonoBehaviour
     public PlayerController FirePlayer;
     public GameObject Panel;
     public GameObject UIPanel;
-    public GameObject Door;
+   // public GameObject Door;
     public GameObject OpenDoor;
 
     [SerializeField]
     private Transform cameraArm;
 
 
-    bool ischeck;
+    public bool ischeck;
+    public bool stagecheck;
+    bool buttoncheck;
     bool isBorder;
     bool eDown;
     bool rDown;
@@ -76,7 +78,6 @@ public class PlayerController : MonoBehaviour
     Rigidbody rigid;
     Material mat;
 
-    NetworkManager _network;
    
     public MyPlayer myPlayer;
     public int PlayerId { get; set; }
@@ -93,10 +94,12 @@ public class PlayerController : MonoBehaviour
         originPosY = theCamera.transform.localPosition.y;
         applyCrouchPosY = originPosY;
 
-        _network = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
-        _network.Login("waterPlayer", "1234");
-        startGame();
+
+        //NetworkManager.Instance.Login("waterPlayer", "1234");
+        //startGame();
     }
+
+    
 
     // Update is called once per frame
     void Update()
@@ -107,9 +110,9 @@ public class PlayerController : MonoBehaviour
         TryJump();
         TryCrouch();
         Move();
-        //CameraRotation();
+        CameraRotation();
         CharacterRotation();
-        LookAround();
+        //LookAround();
         Interation();
         ItemSelect();
         Drop();
@@ -134,13 +137,13 @@ public class PlayerController : MonoBehaviour
     {
         if(attr == "fire")
         {
-            _network.FirePlayerStart();
+            NetworkManager.Instance.FirePlayerStart();
            
         }
             
         else if(attr == "water")
         {
-            _network.WaterPlayerStart();
+            NetworkManager.Instance.WaterPlayerStart();
         }
           
     }
@@ -190,26 +193,10 @@ public class PlayerController : MonoBehaviour
             }
 
             // 서버에 움직임 보내줌
-            _network.MovePlayer(v.x, v.y, v.z);
+            NetworkManager.Instance.MovePlayer(v.x, v.y, v.z);
         }
     }
-    private void LookAround()
-    {
-        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        Vector3 camAngle = cameraArm.rotation.eulerAngles;
-        float x = camAngle.x - mouseDelta.y;
-
-        if (x < 180f)
-        {
-            x = Mathf.Clamp(x, -1f, 70f);
-        }
-        else
-        {
-            x = Mathf.Clamp(x, 335f, 361f);
-        }
-
-        cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
-    }
+   
     private void CharacterRotation()
     {//좌우 캐릭터 회전
         float _yRotation = Input.GetAxisRaw("Mouse X");
@@ -219,7 +206,7 @@ public class PlayerController : MonoBehaviour
 
         Quaternion rot = myRigid.rotation;
 
-        _network.RotPlayer(rot.x, rot.y, rot.z, rot.w);
+        NetworkManager.Instance.RotPlayer(rot.x, rot.y, rot.z, rot.w);
         //Debug.Log(myRigid.rotation);
         //Debug.Log(myRigid.rotation.eulerAngles);
 
@@ -326,6 +313,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump()
     {
+
         if (isCrouch)
             Crouch();
 
@@ -360,7 +348,15 @@ public class PlayerController : MonoBehaviour
         MenuCam.SetActive(true);
         WaterPlayer.gameObject.SetActive(false);
         UIPanel.SetActive(false);
-        gameObject.transform.position = new Vector3(0, 1, 0);
+        if (stagecheck == false)
+        {
+            gameObject.transform.position = new Vector3(0, 1, 0);
+        }
+        else
+        {
+            gameObject.transform.position = new Vector3(95, 1, 0);
+            stagecheck = false;
+        }
     }
     void fire()
     {
@@ -368,7 +364,15 @@ public class PlayerController : MonoBehaviour
         MenuCam.SetActive(true);
         FirePlayer.gameObject.SetActive(false);
         UIPanel.SetActive(false);
-        gameObject.transform.position = new Vector3(0, 1, 5);
+        if (stagecheck == false)
+        {
+            gameObject.transform.position = new Vector3(0, 1, 5);
+        }
+        else
+        {
+            gameObject.transform.position = new Vector3(95, 1, 15);
+            stagecheck = false;
+        }
     }
 
     void StopToWall()
@@ -391,23 +395,25 @@ public class PlayerController : MonoBehaviour
                 Destroy(nearObject);
                 Debug.Log(nearObject + "  :  " + nearObject.tag);
 
-                _network.DestroyObject(1);
+                NetworkManager.Instance.DestroyObject(1);
             }
             if (nearObject.tag == "Key")
             {
                 cntitem[0] = cntitem[0] + 1;
                 Destroy(nearObject);    //상호작용한 물체를 삭제함
-                _network.DestroyObject(2);
+                 NetworkManager.Instance.DestroyObject(2);
             }
             //&& cntitem[0] != 0
             if (nearObject.tag == "Door" && cntitem[0] != 0)
             {
                 OpenDoor.gameObject.SetActive(true);
-                Destroy(Door);
-                //_network.DestroyObject("Door");                
-                
+                Destroy(nearObject);
+                //_network.DestroyObject("Door");                                
             }
-
+            if (nearObject.tag == "MirrorDoor" && buttoncheck == true)
+            {
+                Destroy(nearObject);    
+            }
             //Debug.Log(nearObject + "  :  " + nearObject.tag + "e");
         }
         
@@ -450,16 +456,24 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-
         if (other.tag == "FireFloor" && attr == "water")     //아이템과 닿았을 때
         {
-            Invoke("fire", 0.2f);
+            Invoke("water", 0.2f);
         }
         if (other.tag == "WaterFloor" && attr == "fire")
         {
+            Invoke("fire", 0.2f);
+        }
+        if (other.tag == "FireFloor2" && attr == "water")     //아이템과 닿았을 때
+        {
+            stagecheck = true;
             Invoke("water", 0.2f);
-        }       
-
+        }
+        if (other.tag == "WaterFloor2" && attr == "fire")
+        {
+            stagecheck = true;
+            Invoke("fire", 0.2f);
+        }
         if (other.tag == "PoisonFloor")
         {
             if (attr == "water")
@@ -470,15 +484,43 @@ public class PlayerController : MonoBehaviour
             {
                 Invoke("fire", 0.2f);
 
-                if (PlayerManager.Instance.getObject(1) != null)
-                {
+                //if (PlayerManager.Instance.getObject(1) != null)
+                //{
 
-                }
+                //}
             }
         }
-        if(other.tag == "WaitFloor")
+        if (other.tag == "puzzleitem")
         {
+            if (GameObject.Find("puzzlecube1").GetComponent<PuzzleItem>().redstatus == true && GameObject.Find("puzzlecube2").GetComponent<PuzzleItem>().bluestatus == true)
+            {
+                gameOver(attr);
+            }
+        }
+        if (other.tag == "puzzleitem2")
+        {
+            if (GameObject.Find("puzzlecube1").GetComponent<PuzzleItem>().redstatus == true && GameObject.Find("puzzlecube2").GetComponent<PuzzleItem>().bluestatus == true)
+            {
+                buttoncheck = true;
+            }
+        }
+        if (other.tag == "monster")
+        {
+            stagecheck = true;
+            if (attr == "water")
+            {
+                Invoke("water", 0.2f);
+            }
+            else if (attr == "fire")
+            {
+                Invoke("fire", 0.2f);
+            }
+        }
+        if (other.tag == "trigger" && buttoncheck == true)
+        {
+            stagecheck = true;
             ischeck = true;
+            gameOver(attr);
         }
     }
     void OnTriggerStay(Collider other)
@@ -489,7 +531,13 @@ public class PlayerController : MonoBehaviour
             nearObject = other.gameObject;
         else if (other.tag == "Key")
             nearObject = other.gameObject;
-        else if (other.tag == "WaitFloor")
+        else if (other.tag == "MirrorDoor")
+            nearObject = other.gameObject;
+        else if (other.tag == "puzzleitem")
+            nearObject = other.gameObject;
+        else if (other.tag == "monster")
+            nearObject = other.gameObject;
+        else if (other.tag == "trigger")
             nearObject = other.gameObject;
 
     }

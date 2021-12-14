@@ -8,7 +8,6 @@ public class PacketQueue : MonoBehaviour
 
     Queue<IPacket> _packetQueue = new Queue<IPacket>();
     object _lock = new object();
-
    
     public void Push(IPacket packet)
     {
