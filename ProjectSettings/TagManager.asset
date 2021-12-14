@@ -3,7 +3,24 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - FireFloor
+  - WaterFloor
+  - PoisonFloor
+  - rockitem
+  - Floor
+  - Door
+  - Key
+  - puzzleitem
+  - waterplayer
+  - fireplayer
+  - WaitFloor
+  - monster
+  - MirrorDoor
+  - trigger
+  - puzzleitem2
+  - FireFloor2
+  - WaterFloor2
   layers:
   - Default
   - TransparentFX
