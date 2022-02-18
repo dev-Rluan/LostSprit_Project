@@ -1,4 +1,4 @@
-# LostSprit_Project
+# LostSprit_Project(전체 수정 중)
 
 - Unity기반 협력 멀티퍼즐게임
 - 2~4인용 게임
