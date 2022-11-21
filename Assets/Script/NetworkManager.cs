@@ -39,6 +39,10 @@ public class NetworkManager : MonoBehaviour
 			PacketManager.Instance.HandlePacket(_session, packet);			
 		}		
     }
+    // 개선 방향 
+    // public void send(T){
+    //	Send(T.Write());
+//	}
 	public void Login(string id, string pwd)
 	{
 		C_Login loginPacket = new C_Login();
