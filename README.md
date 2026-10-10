@@ -1,4 +1,20 @@
-# LostSprit_Project(전체 수정 중)
+# LostSprit_Project
+
+Unity 기반 협력 멀티퍼즐 게임 개발 기록입니다. 2~4명의 정령이 속성별 길과 퍼즐을 활용해 집으로 돌아가는 게임을 구현합니다.
+
+## 프로젝트 열기
+
+Unity Hub에서 저장소 폴더를 기존 프로젝트로 추가합니다. 현재 프로젝트 설정에 기록된 에디터 버전은 **2020.3.2f1**입니다.
+
+- [Assets/Scenes](Assets/Scenes): 게임 화면과 레벨 씬
+- [Assets/Script](Assets/Script): 플레이어·퍼즐·네트워크 코드
+- [ProjectSettings](ProjectSettings): 에디터와 빌드 설정
+
+> 개발 기록 상태: 전체 수정 중
+
+씬별 동작과 서버 연결 설정은 코드·에디터에서 확인합니다.
+
+## 기존 게임 기록
 
 - Unity기반 협력 멀티퍼즐게임
 - 2~4인용 게임
